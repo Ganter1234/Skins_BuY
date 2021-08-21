@@ -1,6 +1,17 @@
 ![MySenPai](https://pa1.narvii.com/6862/6098ddd3be86e6253a9a2174796bf3fba9c06867r1-500-260_hq.gif)
 
 
+## Требование:
+
+# GameServer:
+- [Sourcemode 1.8 - Sourcemode 1.11](https://www.sourcemod.net/downloads.php?branch=stable)
+
+# Web-Хост:
+- PHP 7.0 - PHP 7.2
+
+***
+
+
 # Установка
 - #### Распокавать `.rar` или `.zip ` к себе на `WEB-Хост` соблюдая иерархию католога.
 - #### Открыть папку `WEB-HOST`, перейти `skins_buy\settings`, открыть файл `install.sql`, все содержимое скапировать в `Базу данных` (где лежить сам движок GameCMS)
