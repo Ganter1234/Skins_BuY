@@ -1,0 +1,15 @@
+// Впишите путь моделий для скачки
+//
+// - Коментарий (//)
+// ПРИМЕР
+//materials/models/player/slow/bio_suit/slow_bio_suit.vmt
+//materials/models/player/slow/bio_suit/slow_bump.vtf
+//materials/models/player/slow/bio_suit/slow_glass_front.vmt
+//materials/models/player/slow/bio_suit/slow_bio_suit.vtf
+//materials/models/player/slow/bio_suit/slow_glass_front.vtf
+//models/player/slow/bio_suit/slow_bio_suit.dx90.vtx
+//models/player/slow/bio_suit/slow_bio_suit.vvd
+//models/player/slow/bio_suit/slow_bio_suit.sw.vtx
+//models/player/slow/bio_suit/slow_bio_suit.phy
+//models/player/slow/bio_suit/slow_bio_suit.mdl
+//models/player/slow/bio_suit/slow_bio_suit.dx80.vtx
