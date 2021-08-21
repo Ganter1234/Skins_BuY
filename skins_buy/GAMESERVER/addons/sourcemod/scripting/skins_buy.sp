@@ -69,9 +69,7 @@ public OnPluginStart()
 }
 
 public OnConfigsExecuted()
-{
-	CreateTimer(60.0, Timer_info, 0, TIMER_REPEAT|TIMER_FLAG_NO_MAPCHANGE);
-	
+{	
 	GetConVarString(h_DownListPath, s_DownListPath, sizeof(s_DownListPath));
 	HookConVarChange(h_DownListPath, CvarChanges);
 	
@@ -79,18 +77,6 @@ public OnConfigsExecuted()
 		File_ReadDownloadList(s_DownListPath);
 	else
 		LogError("Downloadslist '%s' not found", s_DownListPath);
-}
-
-public Action Timer_info(Handle timer)
-{
-    ServerCommand("echo =====================================================");
-    ServerCommand("echo Плагин Skins BuY (version 1.0)");
-    ServerCommand("echo Автор плагина Pr[E]fix");
-    ServerCommand("echo [VK] https://vk.com/cyxaruk1337");
-    ServerCommand("echo Автор плагина Pr[E]fix");
-    ServerCommand("echo =====================================================");
-    
-    return Plugin_Continue;
 }
 
 public CvarChanges(Handle:convar, const String:oldValue[], const String:newValue[])
@@ -208,5 +194,5 @@ public Action info_skins(int client, int args)
 }
 public Action support_skins(int client, int args)
 {
-	PrintToConsole(client, "\n\n\n\n========Поддержка плагина========\n\n**Поддержка плагина только через меня\n**[VK] - vk.com/cyxaruk1337\n\n========Поддержка плагина========\n\n");
+	PrintToConsole(client, "\n\n\n\n========Поддержка плагина========\n\n**Поддержка плагина только через меня\n**[VK] - vk.com/cyxaruk1337\n**[GITHUB] - https://github.com/PrefixHLMOD/Skins_BuY\n\n========Поддержка плагина========\n\n");
 }
