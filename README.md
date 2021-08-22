@@ -1,12 +1,20 @@
 ![MySenPai](https://pa1.narvii.com/6862/6098ddd3be86e6253a9a2174796bf3fba9c06867r1-500-260_hq.gif)
 
 
-## Требование:
+# F.A.Q
+Что делает данный модуль?
 
-# GameServer:
+- Данный модуль позволяет вам купить скин на сайте, так же купленный скин будет выдан в игру (по типу персонального скина :D )
+
+`Данный модуль работает GameCMS UNI и AWS Code`
+
+***
+# Требование:
+
+## GameServer:
 - [Sourcemode 1.8 - Sourcemode 1.11](https://www.sourcemod.net/downloads.php?branch=stable)
 
-# Web-Хост:
+## Web-Хост:
 - PHP 7.0 - PHP 7.2
 
 ***
