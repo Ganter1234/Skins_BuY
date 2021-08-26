@@ -2,7 +2,7 @@
 
 ![MySenPai](https://pa1.narvii.com/6862/6098ddd3be86e6253a9a2174796bf3fba9c06867r1-500-260_hq.gif)
 
-## Поддерживающие игры CS:S(steam) CSS(no-steam)
+## Поддерживающие игры CS:S(steam) CSS(no-steam) CS:GO
 
 # F.A.Q
  ## __Что делает данный модуль?__
