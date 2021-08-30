@@ -97,7 +97,7 @@
 			$sth->setFetchMode(PDO::FETCH_OBJ);
 			$row = $sth->fetch();
 			
-			return ['image' => "<img src=\"{$row->image}\">", 'price' => $row->price, 'server_id' => $row->server_id, 'name' => $row->name, 'mdl' => $row->modelt];
+			return ['image' => "<img src=\"{$row->image}\">", 'price' => $row->price, 'server_id' => $row->server_id, 'name' => $row->name, 'mdlt' => $row->modelt, 'mdlct' => $row->modelct];
 		}
 		
 		public function buy($skin_id, $user_id, $steamid, $nickname) {
@@ -109,7 +109,7 @@
 			
 			if($user->shilings >= $info['price']) {
 				if($this->pdo->query("UPDATE `users` SET `shilings`='".($user->shilings - $info['price'])."' WHERE `id`='{$user_id}'")) {
-					$this->pdo->query("INSERT INTO `skins_buy_purchases`(`user_id`, `skin_id`, `server_id`, `modelt`, `modelct`, `price`, `steamid`, `nickname`, `timeleft`, `enable`) VALUES ('{$user_id}', '{$skin_id}', '{$info['server_id']}', '{$info['mdl']}', '{$info['mdl']}', '{$info['price']}', '{$nickname}', '{$steamid}', '".time()."', '1')");
+					$this->pdo->query("INSERT INTO `skins_buy_purchases`(`user_id`, `skin_id`, `server_id`, `modelt`, `modelct`, `price`, `steamid`, `nickname`, `timeleft`, `enable`) VALUES ('{$user_id}', '{$skin_id}', '{$info['server_id']}', '{$info['mdlt']}', '{$info['mdlct']}', '{$info['price']}', '{$nickname}', '{$steamid}', '".time()."', '1')");
 					return ['result' => 1, 'name' => $info['name']];
 				} 
 			}
