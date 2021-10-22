@@ -5,7 +5,6 @@
 *	[HLMOD] https://hlmod.ru/members/pr-e-fix.110719/
 *	[TELEGRAM] https://tlgg.ru/@Prefix20192 
 *	[GITHUB] https://github.com/PrefixHLMOD 
-*	[WORKSMA https://www.worksma.ru/profile 
 *
 *	ПРОСЬБА АВТОРА ОСТАВИТЬ ОТЗЫВ НА ЭТИХ РЕСУРСАХ ГДЕ ВЫ СКАЧАЛИ У НЕГО ДАННЫЙ МОДУЛЬ
 *	ПРОСЬБА НЕ УДАЛЯТЬ ДАННУЮ ЛИЦЕНЗИЮ В УВАЖЕНИЕ АВТОРА ПЛАГИНА
