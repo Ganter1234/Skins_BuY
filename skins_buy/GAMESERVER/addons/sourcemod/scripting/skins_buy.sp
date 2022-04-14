@@ -37,6 +37,9 @@ new Handle:h_Enable,
 bool bSkinDisableT[MAXPLAYERS+1],
      bSkinDisableCT[MAXPLAYERS+1];
 
+new Handle:cookieT;
+new Handle:cookieCT;
+
 public Plugin:myinfo = 
 {
 	name = PLUGIN_NAME,
@@ -65,8 +68,51 @@ public OnPluginStart()
 	char sError[128];
 	g_hDatabase = SQL_Connect("skins_buy", true, sError, sizeof(sError));
 	if (sError[0]) SetFailState(sError);
+
+	cookieT = RegClientCookie("SkinsBuy_CMS_T", "", CookieAccess_Private);
+	cookieCT = RegClientCookie("SkinsBuy_CMS_CT", "", CookieAccess_Private);
 	
 	AutoExecConfig(true, "skins_buy");
+}
+
+public OnClientCookiesCached(client)
+{
+	decl String:sValue[8];
+	GetClientCookie(client, cookieT, sValue, sizeof(sValue));
+	if(sValue[0])
+	{
+		if(StringToInt(sValue) == 0)
+		{
+			bSkinDisableT[client] = false;
+		}
+		else if(StringToInt(sValue) == 1)
+		{
+			bSkinDisableT[client] = true;
+		}
+	}
+	else
+	{
+		SetClientCookie(client, cookieT, "0");
+		bSkinDisableT[client] = false;
+	}
+
+	GetClientCookie(client, cookieCT, sValue, sizeof(sValue));
+	if(sValue[0])
+	{
+		if(StringToInt(sValue) == 0)
+		{
+			bSkinDisableCT[client] = false;
+		}
+		else if(StringToInt(sValue) == 1)
+		{
+			bSkinDisableCT[client] = true;
+		}
+	}
+	else
+	{
+		SetClientCookie(client, cookieCT, "0");
+		bSkinDisableCT[client] = false;
+	}
 }
 
 public OnConfigsExecuted()
@@ -178,15 +224,39 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 
             if (StrEqual(info, "1"))
             {
-		CS_UpdateClientModel(client);
-                bSkinDisableT[client] = true;
-		PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
+				decl String:sValue[8];
+				GetClientCookie(client, cookieT, sValue, sizeof(sValue));
+				if(StringToInt(sValue) == 0)
+				{
+					SetClientCookie(client, cookieT, "1");
+					CS_UpdateClientModel(client);
+					bSkinDisableT[client] = true;
+					PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
+				}
+				else
+				{
+					SetClientCookie(client, cookieT, "0");
+					bSkinDisableT[client] = false;
+					PrintToChat(client, "[SKINS] Ваш скин за Т включен!");
+				}
             }
             else if (StrEqual(info, "2"))
             {
-		CS_UpdateClientModel(client);
-     		bSkinDisableCT[client] = true;
-		PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
+				decl String:sValue[8];
+				GetClientCookie(client, cookieT, sValue, sizeof(sValue));
+				if(StringToInt(sValue) == 0)
+				{
+					SetClientCookie(client, cookieCT, "1");
+					CS_UpdateClientModel(client);
+					bSkinDisableCT[client] = true;
+					PrintToChat(client, "[SKINS] Ваш скин за CТ отключен!");
+				}
+				else
+				{
+					SetClientCookie(client, cookieCT, "0");
+					bSkinDisableCT[client] = false;
+					PrintToChat(client, "[SKINS] Ваш скин за CТ включен!");
+				}
             }
         }
     }
