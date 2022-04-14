@@ -50,9 +50,6 @@ public OnPluginStart()
 {
 	h_Enable = CreateConVar("sm_skins_enable", "1", "Включить или выключить плагин", 0, true, 0.0, true, 1.0);
 	h_DownListPath = CreateConVar("sm_skins_buy_downloadslist", "addons/sourcemod/configs/skins_buy/skins_downloadslist.txt", "Путь к списку скачки моделий");
-
-	RegConsoleCmd("skins_buy_info", info_skins, "Информация о плагине");
-	RegConsoleCmd("skins_buy_support", support_skins, "Поддержка плагина");
 	
 	RegAdminCmd("sm_skins_reload", Command_Reload, ADMFLAG_ROOT);
 
@@ -240,13 +237,4 @@ stock GetExtension(const String:path[], String:buffer[], size)
 	}
 
 	strcopy(buffer, size, path[++extpos]);
-}
-
-public Action info_skins(int client, int args)
-{
-	PrintToConsole(client, "\n\n\n\n========Информация о плагине========\n\n**Автор: Pr[E]fix | vk.com/cyxaruk13337\n**Название плагина: [GAMECMS] Skins BuY\n**Описание плагина: Выдает скин который игрок купил на сайте\n**Версия плагина: 1.0\n**Поддержка плагина только через меня\n**[VK] - vk.com/cyxaruk1337\n\n========Информация о плагине========\n\n");
-}
-public Action support_skins(int client, int args)
-{
-	PrintToConsole(client, "\n\n\n\n========Поддержка плагина========\n\n**Поддержка плагина только через меня\n**[VK] - vk.com/cyxaruk1337\n**[GITHUB] - https://github.com/PrefixHLMOD/Skins_BuY\n\n========Поддержка плагина========\n\n");
 }
