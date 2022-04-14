@@ -229,9 +229,13 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 				if(StringToInt(sValue) == 0)
 				{
 					SetClientCookie(client, cookieT, "1");
-					CS_UpdateClientModel(client);
 					bSkinDisableT[client] = true;
 					PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
+
+					if(client && IsClientInGame(client) && IsPlayerAlive(client)
+					{
+						CS_UpdateClientModel(client);
+					}
 				}
 				else
 				{
@@ -247,9 +251,13 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 				if(StringToInt(sValue) == 0)
 				{
 					SetClientCookie(client, cookieCT, "1");
-					CS_UpdateClientModel(client);
 					bSkinDisableCT[client] = true;
 					PrintToChat(client, "[SKINS] Ваш скин за CТ отключен!");
+
+					if(client && IsClientInGame(client) && IsPlayerAlive(client)
+					{
+						CS_UpdateClientModel(client);
+					}
 				}
 				else
 				{
