@@ -232,7 +232,7 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 					bSkinDisableT[client] = true;
 					PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
 
-					if(client && IsClientInGame(client) && IsPlayerAlive(client)
+					if(client && IsClientInGame(client) && IsPlayerAlive(client))
 					{
 						CS_UpdateClientModel(client);
 					}
@@ -254,7 +254,7 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 					bSkinDisableCT[client] = true;
 					PrintToChat(client, "[SKINS] Ваш скин за CТ отключен!");
 
-					if(client && IsClientInGame(client) && IsPlayerAlive(client)
+					if(client && IsClientInGame(client) && IsPlayerAlive(client))
 					{
 						CS_UpdateClientModel(client);
 					}
