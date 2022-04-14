@@ -1,6 +1,6 @@
 /*
 *							ИНФОРМАЦИЯ О ПЛАГИНЕ
-*	Автор плагина  Pr[E]fix
+*	Автор плагина  Pr[E]fix & Ganter1234
 *	[VK] https://vk.com/cyxaruk1337
 *	[HLMOD] https://hlmod.ru/members/pr-e-fix.110719/
 *	[TELEGRAM] https://tlgg.ru/@Prefix20192 
@@ -19,9 +19,9 @@
 #include <smlib>
 #include <cstrike>
 
-#define PLUGIN_VERSION "1.0(beta)"
-#define PLUGIN_NAME "[GAMECMS] Skins BuY"
-#define PLUGIN_AUTHOR "Pr[E]fix | vk.com/cyxaruk1337"
+#define PLUGIN_VERSION "1.0"
+#define PLUGIN_NAME "[GAMECMS] Skins Buy"
+#define PLUGIN_AUTHOR "Pr[E]fix | vk.com/cyxaruk1337 & Ganter1234"
 
 new bool:b_enabled,
 	bool:IsPlayerHasSkins[MAXPLAYERS+1];
@@ -33,6 +33,9 @@ new String:s_PlayerModelT[MAXPLAYERS+1][PLATFORM_MAX_PATH],
 new Handle:h_Enable,
 	Handle:h_DownListPath,
 	Handle:g_hDatabase;
+
+bool bSkinDisableT[MAXPLAYERS+1],
+     bSkinDisableCT[MAXPLAYERS+1];
 
 public Plugin:myinfo = 
 {
@@ -52,6 +55,8 @@ public OnPluginStart()
 	RegConsoleCmd("skins_buy_support", support_skins, "Поддержка плагина");
 	
 	RegAdminCmd("sm_skins_reload", Command_Reload, ADMFLAG_ROOT);
+
+	RegConsoleCmd("sm_skins", Command_SkinMenu);
 	
 	b_enabled = GetConVarBool(h_Enable);
 	
@@ -113,6 +118,17 @@ public Action:Command_Reload(client, args)
 	return Plugin_Handled;
 }
 
+public Action:Command_SkinMenu(client, args)
+{
+	if (!client || !IsPlayerHasSkins[client] || IsFakeClient(client)) {
+		PrintToChat(client, "[SKINS] У вас нету ни одного купленного скина!");
+		return Plugin_Handled;
+	}
+	
+	CreateSkinMenu(client);
+	return Plugin_Handled;
+}
+
 public Event_PlayerSpawn(Handle:event, const String:name[], bool:dontBroadcast)
 {
 	new client = GetClientOfUserId(GetEventInt(event, "userid"));
@@ -129,15 +145,54 @@ public Action:SetClientModel(Handle:timer, any:client)
 	{
 		case CS_TEAM_T :
 		{
-			if (s_PlayerModelT[client][0] && IsModelFile(s_PlayerModelT[client]))
+			if (s_PlayerModelT[client][0] && IsModelFile(s_PlayerModelT[client]) && !bSkinDisableT[client])
 				SetEntityModel(client, s_PlayerModelT[client]);
 		}
 		case CS_TEAM_CT :
 		{
-			if (s_PlayerModelCT[client][0] && IsModelFile(s_PlayerModelCT[client]))
+			if (s_PlayerModelCT[client][0] && IsModelFile(s_PlayerModelCT[client]) && !bSkinDisableCT[client])
 				SetEntityModel(client, s_PlayerModelCT[client]);
 		}
 	}
+}
+
+void CreateSkinMenu(int client)
+{
+	Menu hMenu = new Menu(Handler_hMenu, MenuAction_End|MenuAction_Select);
+	SetMenuExitBackButton(hMenu, true);
+	hMenu.SetTitle("Skins | Меню");
+	hMenu.AddItem("1", "Отключить скин за T");
+	hMenu.AddItem("2", "Отключить скин за CT");
+	hMenu.Display(client, MENU_TIME_FOREVER);
+}
+
+public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
+{
+    switch(action)
+    {
+        case MenuAction_End:
+        {
+            delete hMenu;
+        }
+        case MenuAction_Select:
+        {
+            char info[64];
+            hMenu.GetItem(item, info, sizeof info);
+
+            if (StrEqual(info, "1"))
+            {
+		CS_UpdateClientModel(client);
+                bSkinDisableT[client] = true;
+		PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
+            }
+            else if (StrEqual(info, "2"))
+            {
+		CS_UpdateClientModel(client);
+     		bSkinDisableCT[client] = true;
+		PrintToChat(client, "[SKINS] Ваш скин за Т отключен!");
+            }
+        }
+    }
 }
 
 public OnClientPutInServer(client)
