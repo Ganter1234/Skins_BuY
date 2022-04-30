@@ -22,7 +22,7 @@
 # Требование:
 
 ## GameServer:
-- [Sourcemode 1.8 - Sourcemode 1.11](https://www.sourcemod.net/downloads.php?branch=stable)
+- [Sourcemod 1.8 - Sourcemod 1.11](https://www.sourcemod.net/downloads.php?branch=stable)
 
 ## Web-Хост:
 - PHP 7.0 - PHP 7.2
