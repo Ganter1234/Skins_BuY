@@ -282,6 +282,26 @@ public OnClientPutInServer(client)
 	GetClientAuthString(client, steam_id, sizeof(steam_id));
 	
 	s_PlayerModelT[client][0] = s_PlayerModelCT[client][0] = 0;
+
+	char sQueryTime[128];
+	FormatEx(sQueryTime, sizeof(sQueryTime), "SELECT time FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
+	Handle hResultTime = SQL_Query(g_hDatabase, sQueryTime);
+	if (SQL_FetchRow(hResultTime))
+	{
+		char s_Time[16];
+		SQL_FetchString(hResultTime, 0, s_Time, sizeof(s_Time));
+		char s_FormatTime[16];
+		FormatTime(s_FormatTime, sizeof(s_FormatTime), "%F");
+
+		if(StringToInt(s_FormatTime) > StringToInt(s_Time))
+		{
+			char sQueryDelete[128];
+			FormatEx(sQueryDelete, sizeof(sQueryDelete), "DELETE FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
+			SQL_Query(g_hDatabase, sQueryDelete);
+		}
+	}
+	CloseHandle(hResultTime);
+
 	char sQuery[128];
 	FormatEx(sQuery, sizeof(sQuery), "SELECT modelt, modelct FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
 	Handle hResult = SQL_Query(g_hDatabase, sQuery);
