@@ -18,8 +18,9 @@
 #include <sdktools>
 #include <smlib>
 #include <cstrike>
+#include <clientprefs>
 
-#define PLUGIN_VERSION "1.0"
+#define PLUGIN_VERSION "2.0"
 #define PLUGIN_NAME "[GAMECMS] Skins Buy"
 #define PLUGIN_AUTHOR "Pr[E]fix | vk.com/cyxaruk1337 & Ganter1234"
 
@@ -206,6 +207,7 @@ void CreateSkinMenu(int client)
 	hMenu.SetTitle("Skins | Меню");
 	hMenu.AddItem("1", "Отключить скин за T");
 	hMenu.AddItem("2", "Отключить скин за CT");
+	hMenu.AddItem("3", "Меню скинов");
 	hMenu.Display(client, MENU_TIME_FOREVER);
 }
 
@@ -245,7 +247,7 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 				}
             }
             else if (StrEqual(info, "2"))
-            {
+	    {
 				decl String:sValue[8];
 				GetClientCookie(client, cookieT, sValue, sizeof(sValue));
 				if(StringToInt(sValue) == 0)
@@ -266,8 +268,100 @@ public int Handler_hMenu(Menu hMenu, MenuAction action, int client, int item)
 					PrintToChat(client, "[SKINS] Ваш скин за CТ включен!");
 				}
             }
+	    else if (StrEqual(info, "3"))
+	    {
+		CreateSkinListMenu(client);
+            }
         }
     }
+}
+
+void CreateSkinListMenu(int client)
+{
+	Menu hMenu = new Menu(Handler_hMenuList, MenuAction_End|MenuAction_Select);
+	SetMenuExitBackButton(hMenu, true);
+	hMenu.SetTitle("Skins | Меню");
+	char steam_id[21];
+	GetClientAuthString(client, steam_id, sizeof(steam_id));
+	do
+	{
+		char sQuery[128];
+		FormatEx(sQuery, sizeof(sQuery), "SELECT skins_name,team FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
+		Handle hResult = SQL_Query(g_hDatabase, sQuery);
+		if (SQL_FetchRow(hResult))
+		{
+			char s_SkinName[64];
+			SQL_FetchString(hResult, 0, s_SkinName, sizeof(s_SkinName));
+			int g_iTeam;
+			SQL_FetchInt(hResult, 1, g_iTeam);
+
+			if(!s_SkinName[0])
+			{
+				CloseHandle(hResult);
+				break;
+			}
+
+			char s_Info[80];
+			FormatEx(s_Info, sizeof(s_Info), "%s [%i]", s_SkinName, g_iTeam);
+			if(g_iTeam == 3)
+				ReplaceString(s_Info, 80, "[3]", [CT]);
+			else if(g_iTeam == 2)
+				ReplaceString(s_Info, 80, "[2]", [T]);
+			hMenu.AddItem(s_SkinName, s_Info);
+		}
+		else 
+		{
+			CloseHandle(hResult);
+			break;
+		}
+	}
+	while(1 > 0); // Костыльчик вам в ленту :D
+	hMenu.Display(client, MENU_TIME_FOREVER);
+}
+
+public int Handler_hMenuList(Menu hMenu, MenuAction action, int client, int item)
+{
+	switch(action)
+	{
+		case MenuAction_End:
+		{
+			delete hMenu;
+		}
+		case MenuAction_Select:
+		{
+			char info[64];
+			hMenu.GetItem(item, info, sizeof info);
+
+			char steam_id[21];
+			GetClientAuthString(client, steam_id, sizeof(steam_id));
+
+			char sQuery[128];
+			FormatEx(sQuery, sizeof(sQuery), "SELECT modelt,modelct,team FROM skins_buy_purchases WHERE steamid = '%s' AND skins_name = '%s'", steam_id, info);
+			Handle hResult = SQL_Query(g_hDatabase, sQuery);
+			if (SQL_FetchRow(hResult))
+			{
+				char s_ModelT[64];
+				SQL_FetchString(hResult, 0, s_ModelT, sizeof(s_ModelT));
+				char s_ModelCT[64];
+				SQL_FetchString(hResult, 1, s_ModelCT, sizeof(s_ModelCT));
+				int g_iTeam;
+				SQL_FetchInt(hResult, 2, g_iTeam);
+
+				if(g_iTeam == 2)
+				{
+					FormatEx(s_PlayerModelT[client], sizeof(s_PlayerModelT[]), "%s", s_ModelT);
+	`				if (!IsModelPrecached(s_PlayerModelT[client])) PrecacheModel(s_PlayerModelT[client], true);
+					PrintToChat(client, "[SKINS] Вы успешно установили скин: %s (будет доступен в след.раунде)", info);
+				}
+				if(g_iTeam == 3)
+				{
+					FormatEx(s_PlayerModelCT[client], sizeof(s_PlayerModelCT[]), "%s", s_ModelCT);
+					if (!IsModelPrecached(s_PlayerModelCT[client])) PrecacheModel(s_PlayerModelCT[client], true);
+					PrintToChat(client, "[SKINS] Вы успешно установили скин: %s (будет доступен в след.раунде)", info);
+				}
+			}
+		}
+	}
 }
 
 public OnClientPutInServer(client)
@@ -284,21 +378,13 @@ public OnClientPutInServer(client)
 	s_PlayerModelT[client][0] = s_PlayerModelCT[client][0] = 0;
 
 	char sQueryTime[128];
-	FormatEx(sQueryTime, sizeof(sQueryTime), "SELECT time FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
+	FormatEx(sQueryTime, sizeof(sQueryTime), "SELECT * FROM skins_buy_purchases WHERE steamid = '%s' AND CURDATE() > time", steam_id);
 	Handle hResultTime = SQL_Query(g_hDatabase, sQueryTime);
 	if (SQL_FetchRow(hResultTime))
 	{
-		char s_Time[16];
-		SQL_FetchString(hResultTime, 0, s_Time, sizeof(s_Time));
-		char s_FormatTime[16];
-		FormatTime(s_FormatTime, sizeof(s_FormatTime), "%F");
-
-		if(StringToInt(s_FormatTime) > StringToInt(s_Time))
-		{
-			char sQueryDelete[128];
-			FormatEx(sQueryDelete, sizeof(sQueryDelete), "DELETE FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
-			SQL_Query(g_hDatabase, sQueryDelete);
-		}
+		char sQueryDelete[128];
+		FormatEx(sQueryDelete, sizeof(sQueryDelete), "DELETE FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
+		SQL_Query(g_hDatabase, sQueryDelete);
 	}
 	CloseHandle(hResultTime);
 
