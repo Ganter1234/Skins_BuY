@@ -283,10 +283,12 @@ void CreateSkinListMenu(int client)
 	hMenu.SetTitle("Skins | Меню");
 	char steam_id[21];
 	GetClientAuthString(client, steam_id, sizeof(steam_id));
+	int number;
 	do
 	{
 		char sQuery[128];
-		FormatEx(sQuery, sizeof(sQuery), "SELECT skins_name,team FROM skins_buy_purchases WHERE steamid = '%s'", steam_id);
+		number++;
+		FormatEx(sQuery, sizeof(sQuery), "SELECT skins_name,team,number_skin FROM skins_buy_purchases WHERE steamid = '%s' AND number_skin = '%i'", steam_id, number);
 		Handle hResult = SQL_Query(g_hDatabase, sQuery);
 		if (SQL_FetchRow(hResult))
 		{
