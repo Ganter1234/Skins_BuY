@@ -288,7 +288,7 @@ void CreateSkinListMenu(int client)
 	{
 		char sQuery[128];
 		number++;
-		FormatEx(sQuery, sizeof(sQuery), "SELECT skins_name,team,number_skin FROM skins_buy_purchases WHERE steamid = '%s' AND number_skin = '%i'", steam_id, number);
+		FormatEx(sQuery, sizeof(sQuery), "SELECT skins_name,team FROM skins_buy_purchases WHERE steamid = '%s' AND number_skin = '%i'", steam_id, number);
 		Handle hResult = SQL_Query(g_hDatabase, sQuery);
 		if (SQL_FetchRow(hResult))
 		{
